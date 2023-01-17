@@ -48,7 +48,7 @@ public class DiscountProductController : ControllerBase
   [HttpGet("discount/{discountId}")]
   public ActionResult GetProductsOfDiscount(string discountId)
   {
-    var productsOfDiscount = _discountProductService.GetProductsOfDiscount(discountId).Result;
+    var productsOfDiscount = _discountProductService.GetProductsOfDiscount(discountId);
 
     if (productsOfDiscount == null) return NotFound();
     return Ok(productsOfDiscount);

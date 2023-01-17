@@ -19,6 +19,21 @@ public class DiscountProductService : IDiscountProductService
     return discountProduct;
   }
 
+  public string[] AddMultipleDiscountProduct(string discountId, string[] listProductId)
+  {
+    var checkListProductId = GetProductsOfDiscount(null);
+
+    var uniqueListProductId = listProductId.Except(checkListProductId).ToList();
+
+    foreach (var item in uniqueListProductId)
+    {
+      Console.Write(item + " ");
+       _context.DiscountProducts.Add(new DiscountProduct { discountId = discountId, productId = item });
+    }
+     _context.SaveChanges();
+    return listProductId;
+  }
+
   public async Task<string> GetDiscountOfProduct(string productId)
   {
     var discountOfProduct = await _context.DiscountProducts.AsNoTracking().FirstOrDefaultAsync(d => d.productId == productId);
@@ -33,13 +48,14 @@ public class DiscountProductService : IDiscountProductService
     return listDiscountProduct;
   }
 
-  public async Task<IEnumerable<string>> GetProductsOfDiscount(string discountId)
+#nullable enable
+  public IEnumerable<string> GetProductsOfDiscount(string? discountId)
   {
-    var productsOfDiscount = await _context.DiscountProducts
+    var productsOfDiscount = _context.DiscountProducts
                                     .AsNoTracking()
-                                    .Where(p => p.discountId == discountId)
+                                    .Where(p => discountId == null || p.discountId == discountId)
                                     .Select(p => p.productId)
-                                    .ToListAsync();
+                                    .ToList();
 
     return productsOfDiscount;
   }
@@ -78,4 +94,6 @@ public class DiscountProductService : IDiscountProductService
     _context.DiscountProducts.Remove(discountProduct);
     _context.SaveChanges();
   }
+
+
 }

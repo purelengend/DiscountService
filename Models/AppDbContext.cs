@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
   {
     modelBuilder.Entity<Discount>().HasKey(d => d.discountId);
     modelBuilder.Entity<Discount>().Property(d => d.discountId).HasDefaultValueSql("uuid_generate_v4()");
+    modelBuilder.Entity<Discount>().Ignore(x => x.listProductId);
 
     modelBuilder.Entity<DiscountProduct>().HasKey(d => new { d.discountId, d.productId });
   }

@@ -6,6 +6,7 @@ public class DiscountDTO
   public DateTime startDate { get; set; }
   public DateTime endDate { get; set; }
   // public string discountType { get; set; }
+  public string[] listProductId { get; set; }
   public float discountValue { get; set; }
 
  

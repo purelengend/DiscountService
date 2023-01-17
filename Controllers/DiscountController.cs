@@ -11,18 +11,21 @@ namespace DiscountAPI.Controllers;
 public class DiscountController : ControllerBase
 {
   private readonly IDiscountService _discountService;
+  private readonly IDiscountProductService _discountProductService;
   private readonly IMapper _mapper;
   private readonly IServiceProvider _serviceProvider;
   private readonly IDiscountBackgroundService _discountBackgroundService;
 
   public DiscountController(
     IDiscountService discountService,
+    IDiscountProductService discountProductService,
     IMapper mapper,
     IServiceProvider serviceProvider,
     IDiscountBackgroundService discountBackgroundService
     )
   {
     _discountService = discountService;
+    _discountProductService = discountProductService;
     _mapper = mapper;
     _serviceProvider = serviceProvider;
     _discountBackgroundService = discountBackgroundService;
@@ -49,11 +52,14 @@ public class DiscountController : ControllerBase
 
 
   [HttpPost]
-  public ActionResult CreateDiscount(DiscountDTO discountDTO)
+  public ActionResult CreateDiscount([FromBody] DiscountDTO discountDTO)
   {
     var discount = _mapper.Map<Discount>(discountDTO);
     discount.timerId = Guid.NewGuid().ToString(); ;
     var addedDiscount = _discountService.AddDiscount(discount).Result;
+
+    if (addedDiscount != null)
+      _discountProductService.AddMultipleDiscountProduct(discount.discountId, discount.listProductId);
 
     _discountBackgroundService.StartTime(addedDiscount.discountId, addedDiscount.startDate, addedDiscount.timerId);
     _discountBackgroundService.EndTime(addedDiscount.discountId, addedDiscount.endDate, addedDiscount.timerId);
@@ -68,6 +74,9 @@ public class DiscountController : ControllerBase
     discount.timerId = Guid.NewGuid().ToString();
     var updatedDiscount = _discountService.UpdateDiscount(discount).Result;
 
+    if (updatedDiscount != null)
+      _discountProductService.AddMultipleDiscountProduct(discount.discountId, discount.listProductId);
+      
     _discountBackgroundService.StartTime(updatedDiscount.discountId, updatedDiscount.startDate, updatedDiscount.timerId);
     _discountBackgroundService.EndTime(updatedDiscount.discountId, updatedDiscount.endDate, updatedDiscount.timerId);
 

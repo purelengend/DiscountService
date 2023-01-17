@@ -9,5 +9,6 @@ public class Discount
   public string discountType { get; set; }
   public float discountValue { get; set; }
   public string timerId { get; set; }
+  public string[] listProductId { get; set; }
   public virtual List<DiscountProduct> discountProducts { get; set; }
 }
