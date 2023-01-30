@@ -17,11 +17,11 @@ public class DiscountService : IDiscountService
     await _context.SaveChangesAsync();
 
     var entry = _context.Entry(discount);
-    discount.discountId = entry.Property("discountId").CurrentValue.ToString();
+    discount.discountId = new Guid(entry.Property("discountId").CurrentValue.ToString());
     return discount;
   }
 
-  public async Task<Discount> GetDiscount(string id)
+  public async Task<Discount> GetDiscount(Guid id)
   {
     var discount = await _context.Discounts.FindAsync(id);
     return discount;

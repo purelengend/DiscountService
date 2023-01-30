@@ -1,9 +1,7 @@
-namespace DiscountAPI.Models
+namespace DiscountAPI.Models;
+public class DiscountProduct
 {
-  public class DiscountProduct
-  {
-    public string discountId { get; set; }
-    public Discount discount { get; set; }
-    public string productId { get; set; }
-  }
+  public Guid discountId { get; set; }
+  public Discount discount { get; set; }
+  public Guid productId { get; set; }
 }

@@ -37,16 +37,16 @@ public class DiscountProductController : ControllerBase
   }
 
   [HttpGet("product/{productId}")]
-  public ActionResult GetDiscounOfProduct(string productId)
+  public ActionResult GetDiscounOfProduct(Guid productId)
   {
     var discountOfProduct = _discountProductService.GetDiscountOfProduct(productId).Result;
 
-    if (discountOfProduct == null) return NotFound();
+    if (discountOfProduct == Guid.Empty) return NotFound();
     return Ok(discountOfProduct);
   }
 
   [HttpGet("discount/{discountId}")]
-  public ActionResult GetProductsOfDiscount(string discountId)
+  public ActionResult GetProductsOfDiscount(Guid discountId)
   {
     var productsOfDiscount = _discountProductService.GetProductsOfDiscount(discountId);
 
@@ -62,7 +62,7 @@ public class DiscountProductController : ControllerBase
     var checkDiscountOfProductExist = _discountProductService.GetDiscountOfProduct(discountProduct.productId).Result;
 
     if (checkDiscountExist == null) return NotFound("DiscountId not found");
-    if (checkDiscountOfProductExist != null) return BadRequest("Product already had discount");
+    if (checkDiscountOfProductExist != Guid.Empty) return BadRequest("Product already had discount");
 
     var addedDiscountProduct = _discountProductService.AddDiscountProduct(discountProduct).Result;
 
@@ -73,7 +73,7 @@ public class DiscountProductController : ControllerBase
       {
         eventName = "Add a Discount Product",
         discountId = discount.discountId,
-        data = new List<string> { addedDiscountProduct.discountId },
+        data = addedDiscountProduct.productId,
         value = discount.discountValue
       });
 
@@ -88,7 +88,6 @@ public class DiscountProductController : ControllerBase
     var discountProduct = _mapper.Map<DiscountProduct>(discountProductDTO);
 
     var checkDiscountExist = _discountService.GetDiscount(discountProduct.discountId).Result;
-    var checkDiscountOfProductExist = _discountProductService.GetDiscountOfProduct(discountProduct.productId).Result;
 
     if (checkDiscountExist == null) return NotFound("DiscountId not found");
 
@@ -101,7 +100,7 @@ public class DiscountProductController : ControllerBase
       {
         eventName = "Update a Discount Product",
         discountId = discount.discountId,
-        data = new List<string> { updatedDiscountProduct.discountId },
+        data = discountProduct.productId,
         value = discount.discountValue
       });
     return Ok(_mapper.Map<DiscountProductDTO>(updatedDiscountProduct));

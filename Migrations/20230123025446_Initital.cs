@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DiscountAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,10 +15,10 @@ namespace DiscountAPI.Migrations
                 name: "Discounts",
                 columns: table => new
                 {
-                    discountId = table.Column<string>(type: "text", nullable: false, defaultValueSql: "uuid_generate_v4()"),
+                    discountId = table.Column<Guid>(type: "uuid", nullable: false),
                     discountName = table.Column<string>(type: "text", nullable: true),
-                    startDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    endDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    startDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    endDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     discountType = table.Column<string>(type: "text", nullable: true),
                     discountValue = table.Column<float>(type: "real", nullable: false),
                     timerId = table.Column<string>(type: "text", nullable: true)
@@ -32,8 +32,8 @@ namespace DiscountAPI.Migrations
                 name: "DiscountProducts",
                 columns: table => new
                 {
-                    discountId = table.Column<string>(type: "text", nullable: false),
-                    productId = table.Column<string>(type: "text", nullable: false)
+                    discountId = table.Column<Guid>(type: "uuid", nullable: false),
+                    productId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

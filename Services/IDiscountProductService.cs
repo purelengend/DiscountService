@@ -4,15 +4,15 @@ namespace DiscountAPI.Services;
  
 public interface IDiscountProductService
 {
-  public Task<string> GetDiscountOfProduct(string productId);
+  public Task<Guid> GetDiscountOfProduct(Guid productId);
   #nullable enable
-  public IEnumerable<string> GetProductsOfDiscount(string? discountId);
+  public IEnumerable<Guid> GetProductsOfDiscount(Guid? discountId);
 
-  public Task<DiscountProduct> GetSingleDiscountProduct(DiscountProduct discountProduct);
+  public Task<DiscountProduct?> GetSingleDiscountProduct(DiscountProduct discountProduct);
 
   public  Task<IEnumerable<DiscountProduct>> GetDiscountProducts();
   public Task<DiscountProduct> AddDiscountProduct(DiscountProduct discountProduct);
-  public string[] AddMultipleDiscountProduct(string discountId, string[] listProductId);
+  public Guid[] AddMultipleDiscountProduct(Guid discountId, Guid[] listProductId);
   public Task<DiscountProduct> UpdateDiscountProduct(DiscountProduct discountProduct);
 
   public void RemoveAllDiscountProduct();

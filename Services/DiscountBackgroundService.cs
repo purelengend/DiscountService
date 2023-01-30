@@ -12,7 +12,7 @@ public class DiscountBackgroundService : IDiscountBackgroundService
     _messageProducer = messageProducer;
   }
 
-  public void EndTime(string discountId, DateTime endDate, string timerId)
+  public void EndTime(Guid discountId, DateTime endDate, string timerId)
   {
     Console.WriteLine("EndTime Task initiated.");
     if (endDate < DateTime.Now)
@@ -26,7 +26,7 @@ public class DiscountBackgroundService : IDiscountBackgroundService
     }
   }
 
-  public void StartTime(string discountId, DateTime startDate, string timerId)
+  public void StartTime(Guid discountId, DateTime startDate, string timerId)
   {
     Console.WriteLine("StartTime Task initiated.");
     if (startDate < DateTime.Now)
@@ -43,16 +43,23 @@ public class DiscountBackgroundService : IDiscountBackgroundService
 
   private void StartDiscount(object state)
   {
-    var (discountId, timerId) = (ValueTuple<string, string>)state;
+    var (discountId, timerId) = (ValueTuple<Guid, string>)state;
 
-    List<string> listDiscountProduct;
+    List<Guid> listDiscountProduct;
     double discountValue;
     Event sendingMessage = new Event();
 
     // Use the DbContext to modify the database here
     using (var _context = new AppDbContext())
     {
-      var checkTimerId = _context.Discounts.Find(discountId).timerId;
+      var checkDiscountExist = _context.Discounts.Find(discountId);
+
+      if (checkDiscountExist == null)
+      {
+        Console.WriteLine("Discount not found.");
+        return;
+      }
+      var checkTimerId = checkDiscountExist.timerId;
       if (checkTimerId != timerId)
       {
         Console.WriteLine("StartDiscount with timer id: {0} was cancelled.", timerId);
@@ -83,14 +90,21 @@ public class DiscountBackgroundService : IDiscountBackgroundService
 
   private void EndDiscount(object state)
   {
-    var (discountId, timerId) = (ValueTuple<string, string>)state;
-    List<string> listDiscountProduct;
+    var (discountId, timerId) = (ValueTuple<Guid, string>)state;
+    List<Guid> listDiscountProduct;
     double discountValue;
     Event sendingMessage = new Event();
     // Use the DbContext to modify the database here
     using (var _context = new AppDbContext())
     {
-      var checkTimerId = _context.Discounts.Find(discountId).timerId;
+      var checkDiscountExist = _context.Discounts.Find(discountId);
+
+      if (checkDiscountExist == null)
+      {
+        Console.WriteLine("Discount not found.");
+        return;
+      }
+      var checkTimerId = checkDiscountExist.timerId;
       if (checkTimerId != timerId)
       {
         Console.WriteLine("EndDiscount with timer id: {0} was cancelled.", timerId);

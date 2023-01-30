@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DiscountAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230115092642_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230123025446_Initital")]
+    partial class Initital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,10 +27,9 @@ namespace DiscountAPI.Migrations
 
             modelBuilder.Entity("DiscountAPI.Models.Discount", b =>
                 {
-                    b.Property<string>("discountId")
+                    b.Property<Guid>("discountId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("discountName")
                         .HasColumnType("text");
@@ -42,10 +41,10 @@ namespace DiscountAPI.Migrations
                         .HasColumnType("real");
 
                     b.Property<DateTime>("endDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("startDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("timerId")
                         .HasColumnType("text");
@@ -57,11 +56,11 @@ namespace DiscountAPI.Migrations
 
             modelBuilder.Entity("DiscountAPI.Models.DiscountProduct", b =>
                 {
-                    b.Property<string>("discountId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("discountId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("productId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("productId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("discountId", "productId");
 
