@@ -15,23 +15,15 @@ public static class PrepDb
   {
     if (isProd)
     {
-      if (!context.Database.EnsureCreated())
+      Console.WriteLine("----> Applying Migration...");
+      try
       {
-        Console.WriteLine("----> Applying Migration...");
-        try
-        {
-          context.Database.Migrate();
-        }
-        catch (System.Exception ex)
-        {
-          Console.WriteLine("Could not apply migration: " + ex.Message);
-        }
+        context.Database.Migrate();
       }
-      else
+      catch (System.Exception ex)
       {
-        Console.WriteLine("Database existed!");
+        Console.WriteLine("Could not apply migration: " + ex.Message);
       }
-
     }
   }
 }

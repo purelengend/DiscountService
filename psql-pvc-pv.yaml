@@ -1,10 +1,9 @@
-
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-volume  # Sets PV's name
+  name: postgres-pv-volume # Sets PV's name
   labels:
-    type: local  # Sets PV's type to local
+    type: local # Sets PV's type to local
     app: postgres
 spec:
   storageClassName: manual
@@ -13,18 +12,19 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/mnt/data"
+    path: /run/desktop/mnt/host/c/k8s/volumeDir
+    type: DirectoryOrCreate
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgres-pv-claim  # Sets name of PVC
+  name: postgres-pv-claim # Sets name of PVC
   labels:
     app: postgres
 spec:
   storageClassName: manual
   accessModes:
-    - ReadWriteMany  # Sets read and write access
+    - ReadWriteMany # Sets read and write access
   resources:
     requests:
-      storage: 5Gi  # Sets volume size
+      storage: 5Gi # Sets volume size
