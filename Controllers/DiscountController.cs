@@ -67,7 +67,7 @@ public class DiscountController : ControllerBase
     _discountBackgroundService.StartTime(addedDiscount.discountId, addedDiscount.startDate, addedDiscount.timerId);
     _discountBackgroundService.EndTime(addedDiscount.discountId, addedDiscount.endDate, addedDiscount.timerId);
 
-    return Ok(_mapper.Map<DiscountDTO>(addedDiscount));
+    return Ok(_mapper.Map<DiscountDTO>(discountDTO));
   }
 
   [HttpPut]

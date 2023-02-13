@@ -11,7 +11,7 @@ public class MessageProducer : IMessageProducer
   public MessageProducer(IConfiguration config)
   {
     _config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile("appsettings.json", false, false)
     .Build();
   }
   public void SendingMessage<T>(T message)

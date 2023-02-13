@@ -29,7 +29,7 @@ public class AppDbContext : DbContext
     {
       IConfigurationRoot configuration = new ConfigurationBuilder()
           .SetBasePath(Directory.GetCurrentDirectory())
-          .AddJsonFile("appsettings.json")
+          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
           .Build();
       var connectionString = configuration.GetConnectionString("defaultConnection");
       optionsBuilder.UseNpgsql(connectionString);

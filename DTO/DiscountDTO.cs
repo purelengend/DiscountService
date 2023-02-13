@@ -7,6 +7,5 @@ public class DiscountDTO
   public DateTime endDate { get; set; }
   public Guid[] listProductId { get; set; }
   public float discountValue { get; set; }
-
  
 }
