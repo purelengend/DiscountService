@@ -40,7 +40,7 @@ public class MessageProducer : IMessageProducer
 
       var body = Encoding.UTF8.GetBytes(jsonString);
 
-      channel.BasicPublish("CAPSTONE_EXCHANGE", "discount", body: body);
+      channel.BasicPublish("CAPSTONE_EXCHANGE", "INVENTORY_SERVICE", body: body);
 
       Console.WriteLine("SendingMessage Done");
     }
