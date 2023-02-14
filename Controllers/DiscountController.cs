@@ -1,3 +1,4 @@
+using System.Collections;
 using AutoMapper;
 using DiscountAPI.DTO;
 using DiscountAPI.Models;
@@ -84,13 +85,16 @@ public class DiscountController : ControllerBase
     _discountBackgroundService.EndTime(updatedDiscount.discountId, updatedDiscount.endDate, updatedDiscount.timerId);
 
     if (discount.startDate < DateTime.Now && discount.endDate > DateTime.Now)
+    {
+      var sendingData = new Hashtable();
+      sendingData.Add("productIdList", discount.listProductId);
       _messageProducer.SendingMessage(new Event()
       {
         eventName = "Update a Discount",
-        discountId = discount.discountId,
-        data = discount.listProductId,
+        data = sendingData,
         value = discount.discountValue
       });
+    }
     return Ok(_mapper.Map<DiscountDTO>(updatedDiscount));
   }
 

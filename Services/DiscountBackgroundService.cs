@@ -1,3 +1,4 @@
+using System.Collections;
 using DiscountAPI.Models;
 namespace DiscountAPI.Services;
 
@@ -72,12 +73,13 @@ public class DiscountBackgroundService : IDiscountBackgroundService
       _context.SaveChanges();
     }
     Console.WriteLine("StartDiscount done.", discountId);
+    var sendingData = new Hashtable();
+    sendingData.Add("productIdList", listDiscountProduct);
+    sendingData.Add("discountValue", discountValue);
     try
     {
       sendingMessage.eventName = "Start Discount";
-      sendingMessage.discountId = discountId;
-      sendingMessage.data = listDiscountProduct;
-      sendingMessage.value = discountValue;
+      sendingMessage.data = sendingData;
       _messageProducer.SendingMessage(sendingMessage);
 
     }
@@ -118,12 +120,13 @@ public class DiscountBackgroundService : IDiscountBackgroundService
       _context.SaveChanges();
     }
     Console.WriteLine("EndDiscount done.", discountId);
+    var sendingData = new Hashtable();
+    sendingData.Add("productIdList", listDiscountProduct);
+    sendingData.Add("discountValue", discountValue);
     try
     {
       sendingMessage.eventName = "End Discount";
-      sendingMessage.discountId = discountId;
-      sendingMessage.data = listDiscountProduct;
-      sendingMessage.value = Math.Round(discountValue, 1);
+      sendingMessage.data = sendingData;
       _messageProducer.SendingMessage(sendingMessage);
 
     }
