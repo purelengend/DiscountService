@@ -12,8 +12,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+if (connectionString == null)
+{
+  connectionString = builder.Configuration.GetConnectionString("defaultConnection");
+}
+
+Console.WriteLine(connectionString);
 builder.Services.AddDbContext<AppDbContext>(op =>
-                op.UseNpgsql(builder.Configuration.GetConnectionString("defaultConnection")));
+                op.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IDiscountProductService, DiscountProductService>();

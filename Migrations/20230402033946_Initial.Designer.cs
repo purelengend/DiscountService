@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DiscountAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230123025446_Initital")]
-    partial class Initital
+    [Migration("20230402033946_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,8 +59,8 @@ namespace DiscountAPI.Migrations
                     b.Property<Guid>("discountId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("productId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("productId")
+                        .HasColumnType("text");
 
                     b.HasKey("discountId", "productId");
 

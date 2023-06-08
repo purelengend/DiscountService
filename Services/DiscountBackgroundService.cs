@@ -46,7 +46,7 @@ public class DiscountBackgroundService : IDiscountBackgroundService
   {
     var (discountId, timerId) = (ValueTuple<Guid, string>)state;
 
-    List<Guid> listDiscountProduct;
+    List<string> listDiscountProduct;
     double discountValue;
     Event sendingMessage = new Event();
 
@@ -73,14 +73,15 @@ public class DiscountBackgroundService : IDiscountBackgroundService
       _context.SaveChanges();
     }
     Console.WriteLine("StartDiscount done.", discountId);
+    var payload = new Hashtable();
+    payload.Add("event", "LAUNCH_DISCOUNT");
     var sendingData = new Hashtable();
     sendingData.Add("productIdList", listDiscountProduct);
     sendingData.Add("discountValue", discountValue);
+    payload.Add("data", sendingData);
     try
     {
-      sendingMessage.eventName = "Start Discount";
-      sendingMessage.data = sendingData;
-      _messageProducer.SendingMessage(sendingMessage);
+      _messageProducer.SendingMessage(payload);
 
     }
     catch (System.Exception ex)
@@ -93,7 +94,7 @@ public class DiscountBackgroundService : IDiscountBackgroundService
   private void EndDiscount(object state)
   {
     var (discountId, timerId) = (ValueTuple<Guid, string>)state;
-    List<Guid> listDiscountProduct;
+    List<string> listDiscountProduct;
     double discountValue;
     Event sendingMessage = new Event();
     // Use the DbContext to modify the database here
@@ -120,14 +121,15 @@ public class DiscountBackgroundService : IDiscountBackgroundService
       _context.SaveChanges();
     }
     Console.WriteLine("EndDiscount done.", discountId);
+    var payload = new Hashtable();
+    payload.Add("event", "END_DISCOUNT");
     var sendingData = new Hashtable();
     sendingData.Add("productIdList", listDiscountProduct);
     sendingData.Add("discountValue", discountValue);
+    payload.Add("data", sendingData);
     try
     {
-      sendingMessage.eventName = "End Discount";
-      sendingMessage.data = sendingData;
-      _messageProducer.SendingMessage(sendingMessage);
+      _messageProducer.SendingMessage(payload);
 
     }
     catch (System.Exception ex)
@@ -135,6 +137,4 @@ public class DiscountBackgroundService : IDiscountBackgroundService
       Console.WriteLine(ex.Message);
     }
   }
-
-
 }

@@ -56,8 +56,8 @@ namespace DiscountAPI.Migrations
                     b.Property<Guid>("discountId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("productId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("productId")
+                        .HasColumnType("text");
 
                     b.HasKey("discountId", "productId");
 

@@ -19,7 +19,7 @@ public class DiscountProductService : IDiscountProductService
     return discountProduct;
   }
 
-  public Guid[] AddMultipleDiscountProduct(Guid discountId, Guid[] listProductId)
+  public string[] AddMultipleDiscountProduct(Guid discountId, string[] listProductId)
   {
     var checkListProductId = GetProductsOfDiscount(null);
 
@@ -27,13 +27,14 @@ public class DiscountProductService : IDiscountProductService
 
     foreach (var item in uniqueListProductId)
     {
-       _context.DiscountProducts.Add(new DiscountProduct { discountId = discountId, productId = item });
+      if (item != null)
+        _context.DiscountProducts.Add(new DiscountProduct { discountId = discountId, productId = item });
     }
-     _context.SaveChanges();
+    _context.SaveChanges();
     return listProductId;
   }
 
-  public async Task<Guid> GetDiscountOfProduct(Guid productId)
+  public async Task<Guid> GetDiscountOfProduct(string productId)
   {
     var discountOfProduct = await _context.DiscountProducts.AsNoTracking().FirstOrDefaultAsync(d => d.productId == productId);
     if (discountOfProduct == null) return Guid.Empty;
@@ -48,7 +49,7 @@ public class DiscountProductService : IDiscountProductService
   }
 
 #nullable enable
-  public IEnumerable<Guid> GetProductsOfDiscount(Guid? discountId)
+  public IEnumerable<string> GetProductsOfDiscount(Guid? discountId)
   {
     var productsOfDiscount = _context.DiscountProducts
                                     .AsNoTracking()

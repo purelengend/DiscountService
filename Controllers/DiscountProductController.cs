@@ -38,7 +38,7 @@ public class DiscountProductController : ControllerBase
   }
 
   [HttpGet("product/{productId}")]
-  public ActionResult GetDiscounOfProduct(Guid productId)
+  public ActionResult GetDiscounOfProduct(string productId)
   {
     var discountOfProduct = _discountProductService.GetDiscountOfProduct(productId).Result;
 
@@ -78,7 +78,6 @@ public class DiscountProductController : ControllerBase
       {
         eventName = "Add a Discount Product",
         data = sendingData,
-        value = discount.discountValue
       });
     }
 
@@ -108,7 +107,6 @@ public class DiscountProductController : ControllerBase
       {
         eventName = "Update a Discount Product",
         data = sendingData,
-        value = discount.discountValue
       });
 
     }

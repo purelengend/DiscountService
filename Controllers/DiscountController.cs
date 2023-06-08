@@ -59,16 +59,20 @@ public class DiscountController : ControllerBase
   public ActionResult CreateDiscount([FromBody] DiscountDTO discountDTO)
   {
     var discount = _mapper.Map<Discount>(discountDTO);
-    discount.timerId = Guid.NewGuid().ToString(); ;
+
+    discount.timerId = Guid.NewGuid().ToString();
+
     var addedDiscount = _discountService.AddDiscount(discount).Result;
 
-    if (addedDiscount != null)
+    addedDiscount.listProductId = discountDTO.listProductId;
+
+    if (addedDiscount != null && addedDiscount.listProductId != null)
       _discountProductService.AddMultipleDiscountProduct(discount.discountId, discount.listProductId);
 
     _discountBackgroundService.StartTime(addedDiscount.discountId, addedDiscount.startDate, addedDiscount.timerId);
     _discountBackgroundService.EndTime(addedDiscount.discountId, addedDiscount.endDate, addedDiscount.timerId);
 
-    return Ok(_mapper.Map<DiscountDTO>(discountDTO));
+    return Ok(_mapper.Map<DiscountDTO>(addedDiscount));
   }
 
   [HttpPut]
@@ -78,7 +82,7 @@ public class DiscountController : ControllerBase
     discount.timerId = Guid.NewGuid().ToString();
     var updatedDiscount = _discountService.UpdateDiscount(discount).Result;
 
-    if (updatedDiscount != null)
+    if (updatedDiscount != null && updatedDiscount.listProductId != null)
       _discountProductService.AddMultipleDiscountProduct(discount.discountId, discount.listProductId);
 
     _discountBackgroundService.StartTime(updatedDiscount.discountId, updatedDiscount.startDate, updatedDiscount.timerId);
@@ -92,7 +96,6 @@ public class DiscountController : ControllerBase
       {
         eventName = "Update a Discount",
         data = sendingData,
-        value = discount.discountValue
       });
     }
     return Ok(_mapper.Map<DiscountDTO>(updatedDiscount));

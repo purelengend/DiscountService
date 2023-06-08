@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DiscountAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Initital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,7 @@ namespace DiscountAPI.Migrations
                 columns: table => new
                 {
                     discountId = table.Column<Guid>(type: "uuid", nullable: false),
-                    productId = table.Column<Guid>(type: "uuid", nullable: false)
+                    productId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
